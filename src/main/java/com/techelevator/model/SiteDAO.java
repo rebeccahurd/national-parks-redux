@@ -1,10 +1,10 @@
 package com.techelevator.model;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.List;
 
 public interface SiteDAO {
 
-	public List<Site> getSitesBySearchCriteria(LocalDate fromDate, LocalDate toDate);
+	public List<Site> getSitesBySearchCriteria(Date fromDate, Date toDate);
 	
 }
