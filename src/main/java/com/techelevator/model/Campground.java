@@ -1,5 +1,7 @@
 package com.techelevator.model;
 
+import java.math.BigDecimal;
+
 public class Campground {
 	
 	private int campgroundId;
@@ -7,7 +9,7 @@ public class Campground {
 	private String name;
 	private String openFromMM;
 	private String openToMM;
-	private int dailyFee;
+	private BigDecimal dailyFee;
 	public int getCampgroundId() {
 		return campgroundId;
 	}
@@ -23,7 +25,7 @@ public class Campground {
 	public String getOpenToMM() {
 		return openToMM;
 	}
-	public int getDailyFee() {
+	public BigDecimal getDailyFee() {
 		return dailyFee;
 	}
 	public void setCampgroundId(int campgroundId) {
@@ -41,7 +43,7 @@ public class Campground {
 	public void setOpenToMM(String openToMM) {
 		this.openToMM = openToMM;
 	}
-	public void setDailyFee(int dailyFee) {
+	public void setDailyFee(BigDecimal dailyFee) {
 		this.dailyFee = dailyFee;
 	}
 	
