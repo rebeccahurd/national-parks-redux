@@ -7,4 +7,5 @@ public interface SiteDAO {
 
 	public List<Site> getSitesBySearchCriteria(Date fromDate, Date toDate);
 	
+	
 }
