@@ -219,7 +219,11 @@ public class JDBCSiteDAOIntegrationTest {
 		
 		assertEquals(1, testSiteList.size());
 		assertEquals(35, testSiteList.get(0).getSiteNumber());
-		
 	}
-
+	
+	@Test 
+	public void return_site_by_site_id() throws SQLException {
+		Site testSite = siteDAO.getSiteById(1000);
+		assertEquals(7000, testSite.getCampgroundId());
+	}
 }

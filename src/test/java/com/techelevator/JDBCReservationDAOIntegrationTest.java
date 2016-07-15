@@ -101,20 +101,19 @@ public class JDBCReservationDAOIntegrationTest {
 	public void save_reservation_and_read_it_back() throws SQLException {
 		Reservation r = new Reservation();
 		
-		r.setReservationId(5000);
 		r.setSiteId(1000);
 		r.setName("David");
 		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate fromDate = LocalDate.parse("2016-07-01", formatter);
-		r.setFromDate(fromDate);
+		Date sqlFromDate = Date.valueOf("2016-07-01");
+		r.setFromDate(sqlFromDate);
 		
-		LocalDate toDate = LocalDate.parse("2016-07-05", formatter);
-		r.setToDate(toDate);
+		Date sqlToDate = Date.valueOf("2016-07-05");
+		r.setToDate(sqlToDate);
 		
 		reservationDAO.saveReservation(r);
 		
-		assertEquals(1000, reservationDAO.getReservationById(5000).getSiteId());
+		assertEquals("David", reservationDAO.getReservationById(12).getName());
+		// assertEquals(reservationDAO.getNextReservationId(), reservationDAO.getReservationById(11).getReservationId());
 	}
 	
 }

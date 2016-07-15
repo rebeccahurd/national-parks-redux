@@ -25,6 +25,26 @@ public class JDBCSiteDAO implements SiteDAO{
 	}
 
 	@Override
+	public Site getSiteById(int siteId) {
+		String sqlGetSiteById = "SELECT * " +
+								"FROM site "+
+								"WHERE site_id = ?";
+		SqlRowSet result = jdbcTemplate.queryForRowSet(sqlGetSiteById, siteId);
+		Site s = new Site();
+		
+		if (result.next()) {
+			s.setSiteId(result.getInt("site_id"));
+			s.setCampgroundId(result.getInt("campground_id"));
+			s.setSiteNumber(result.getInt("site_number"));
+			s.setMaxOccupancy(result.getInt("max_occupancy"));
+			s.setAccessible(result.getBoolean("accessible"));
+			s.setMaxRvLength(result.getInt("max_rv_length"));
+			s.setUtilities(result.getBoolean("utilities"));
+		}
+		return s;
+	}
+	
+	@Override
 	public List<Site> getSitesBySearchCriteria(int campgroundId, Date fromDate, Date toDate) {
 		ArrayList<Site> siteList = new ArrayList<>();
 		String sqlGetSitesBySearchCriteria = "SELECT * "+
@@ -49,4 +69,5 @@ public class JDBCSiteDAO implements SiteDAO{
 		}
 		return siteList;
 	}
+	
 }

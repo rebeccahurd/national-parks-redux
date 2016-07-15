@@ -38,16 +38,13 @@ private JdbcTemplate jdbcTemplate;
 			r.setName(result.getString("name"));
 			
 			Date fd = result.getDate("from_date");
-			LocalDate fromDate = fd.toLocalDate();
-			r.setFromDate(fromDate);
+			r.setFromDate(fd);
 			
 			Date td = result.getDate("to_date");
-			LocalDate toDate = td.toLocalDate();
-			r.setToDate(toDate);
+			r.setToDate(td);
 			
 			Date cd = result.getDate("create_date");
-			LocalDate createDate = cd.toLocalDate();
-			r.setCreateDate(createDate);
+			r.setCreateDate(cd);
 		}
 		return r;
 	}
@@ -66,16 +63,16 @@ private JdbcTemplate jdbcTemplate;
 			r.setName(results.getString("name"));
 			
 			Date fd = results.getDate("from_date");
-			LocalDate fromDate = fd.toLocalDate();
-			r.setFromDate(fromDate);
+//			LocalDate fromDate = fd.toLocalDate();
+			r.setFromDate(fd);
 			
 			Date td = results.getDate("to_date");
-			LocalDate toDate = td.toLocalDate();
-			r.setToDate(toDate);
+//			LocalDate toDate = td.toLocalDate();
+			r.setToDate(td);
 			
 			Date cd = results.getDate("create_date");
-			LocalDate createDate = cd.toLocalDate();
-			r.setCreateDate(createDate);
+//			LocalDate createDate = cd.toLocalDate();
+			r.setCreateDate(cd);
 			
 			reservationList.add(r);
 		}
@@ -86,12 +83,35 @@ private JdbcTemplate jdbcTemplate;
 	public void saveReservation(Reservation r) {
 		String sqlInsertReservation = "INSERT INTO reservation(reservation_id, site_id, name, from_date, to_date) " +
 									  "VALUES(?, ?, ?, ?, ?)";
+		r.setReservationId(getNextReservationId());
 		jdbcTemplate.update(sqlInsertReservation, r.getReservationId(),
-													r.getSiteId(),
-													r.getName(),
-													r.getFromDate(),
-													r.getToDate());
+												  r.getSiteId(),
+												  r.getName(),
+												  r.getFromDate(),
+												  r.getToDate());
 		
+	}
+
+	@Override
+	public int getCurrentReservationId() {
+		String sqlGetCurrentReservationId = "SELECT currval('reservation_reservation_id_seq')";
+		SqlRowSet currentReservationId = jdbcTemplate.queryForRowSet(sqlGetCurrentReservationId);
+		if (currentReservationId.next()) {
+			System.out.println(currentReservationId);
+			return currentReservationId.getInt(1);
+		} else {
+			throw new RuntimeException("Something went wrong getting the last reservation id.");
+		}
+	}
+	
+	private int getNextReservationId() {
+		SqlRowSet nextReservationId = jdbcTemplate.queryForRowSet("SELECT nextval('reservation_reservation_id_seq')");
+		if(nextReservationId.next()) {
+			System.out.println(nextReservationId.getInt(1));
+			return nextReservationId.getInt(1);
+		} else {
+			throw new RuntimeException("Something went wrong getting the next reservation id.");
+		}
 	}
 	
 	private Reservation mapRowToReservation(SqlRowSet results) {
@@ -103,16 +123,13 @@ private JdbcTemplate jdbcTemplate;
 		r.setName(results.getString("name"));
 		
 		Date fd = results.getDate("from_date");
-		LocalDate fromDate = fd.toLocalDate();
-		r.setFromDate(fromDate);
+		r.setFromDate(fd);
 		
 		Date td = results.getDate("to_date");
-		LocalDate toDate = td.toLocalDate();
-		r.setToDate(toDate);
+		r.setToDate(td);
 		
 		Date cd = results.getDate("create_date");
-		LocalDate createDate = cd.toLocalDate();
-		r.setCreateDate(createDate);
+		r.setCreateDate(cd);
 		
 		return r;
 	}

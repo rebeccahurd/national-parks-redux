@@ -24,7 +24,7 @@ import com.techelevator.model.SiteDAO;
 
 @Transactional
 @Controller
-@SessionAttributes("reservationInfo")
+@SessionAttributes("reservation")
 public class ParkController {
 
 	private ParkDAO parkDAO;
@@ -65,51 +65,59 @@ public class ParkController {
 	
 	@RequestMapping(path="/campsiteSearchResults", method=RequestMethod.GET)
 	public String displaySearchResults(ModelMap model,
-										@RequestParam LocalDate fromDate,
-										@RequestParam LocalDate toDate,
+										@RequestParam String fromDate,
+										@RequestParam String toDate,
 										@RequestParam int campgroundId,
+										@RequestParam String name,
 										Site site) {
 		
 		Date sqlFromDate = Date.valueOf(fromDate);
 		Date sqlToDate = Date.valueOf(toDate);
 		
 		List<Site> siteList = siteDAO.getSitesBySearchCriteria(campgroundId, sqlFromDate, sqlToDate);
-		model.put("reservationInfo", siteList);
+		Reservation r = new Reservation();
+		r.setFromDate(sqlFromDate);
+		r.setToDate(sqlToDate);
+		r.setCreateDate(Date.valueOf(LocalDate.now()));
+		
+		model.put("reservation", r);
 		model.put("siteList", siteList);
 		
-		if(siteList.isEmpty()) {
-		return "redirect:/campsiteSearch";
-		} else {
 		return "campsiteSearchResults";
-		}
+//		}
 	}
 	
 	@RequestMapping(path="/reservationForm", method=RequestMethod.GET)
 	public String displayReservationForm(ModelMap model,
 										@RequestParam int siteId) {
 		
+		Reservation r = (Reservation)model.get("reservation");
+		r.setSiteId(siteId);
+		model.put("reservation", r);
 		return "reservationForm";
 	}
 	
 	@RequestMapping(path="/reservationForm", method=RequestMethod.POST)
 	public String submitReservationForm(ModelMap model,
-										Reservation reservation) {
+										@RequestParam String name) {
 		
-		reservation = new Reservation();
-		reservationDAO.saveReservation(reservation);
-
+		Reservation r = (Reservation)model.get("reservation");
+		r.setName(name);
+		reservationDAO.saveReservation(r);
 		return "redirect:/reservationConfirmation";
 	}
 	
 	@RequestMapping(path="reservationConfirmation", method=RequestMethod.GET)
-	public String displayReservationConfirmation(ModelMap model,
-												@RequestParam int reservationId) {
+	public String displayReservationConfirmation(ModelMap model) {
 		
+		int reservationId = reservationDAO.getCurrentReservationId();
 		Reservation newReservation = reservationDAO.getReservationById(reservationId);
 		model.put("reservation", newReservation);
+		
+		Site site = siteDAO.getSiteById(newReservation.getSiteId());
+		model.put("site", site);
 		return "reservationConfirmation";
 	}
-	
 }
 
 
