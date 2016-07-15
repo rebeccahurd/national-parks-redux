@@ -11,6 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.techelevator.model.Campground;
 import com.techelevator.model.CampgroundDAO;
@@ -23,7 +24,7 @@ import com.techelevator.model.SiteDAO;
 
 @Transactional
 @Controller
-//@SessionAttributes({"")
+@SessionAttributes("reservationInfo")
 public class ParkController {
 
 	private ParkDAO parkDAO;
@@ -64,19 +65,29 @@ public class ParkController {
 	
 	@RequestMapping(path="/campsiteSearchResults", method=RequestMethod.GET)
 	public String displaySearchResults(ModelMap model,
-										@RequestParam Date fromDate,
-										@RequestParam Date toDate,
+										@RequestParam LocalDate fromDate,
+										@RequestParam LocalDate toDate,
+										@RequestParam int campgroundId,
 										Site site) {
 		
-		// ADD CAMPGROUND ID PARAMETER TO METHOD BELOW
-		List<Site> siteList = siteDAO.getSitesBySearchCriteria(fromDate, toDate);
+		Date sqlFromDate = Date.valueOf(fromDate);
+		Date sqlToDate = Date.valueOf(toDate);
+		
+		List<Site> siteList = siteDAO.getSitesBySearchCriteria(campgroundId, sqlFromDate, sqlToDate);
+		model.put("reservationInfo", siteList);
 		model.put("siteList", siteList);
+		
+		if(siteList.isEmpty()) {
+		return "redirect:/campsiteSearch";
+		} else {
 		return "campsiteSearchResults";
+		}
 	}
 	
 	@RequestMapping(path="/reservationForm", method=RequestMethod.GET)
 	public String displayReservationForm(ModelMap model,
-										Reservation reservation) {
+										@RequestParam int siteId) {
+		
 		return "reservationForm";
 	}
 	

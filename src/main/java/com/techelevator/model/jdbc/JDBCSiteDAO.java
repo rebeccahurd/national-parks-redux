@@ -25,13 +25,16 @@ public class JDBCSiteDAO implements SiteDAO{
 	}
 
 	@Override
-	public List<Site> getSitesBySearchCriteria(Date fromDate, Date toDate) {
+	public List<Site> getSitesBySearchCriteria(int campgroundId, Date fromDate, Date toDate) {
 		ArrayList<Site> siteList = new ArrayList<>();
 		String sqlGetSitesBySearchCriteria = "SELECT * "+
-											 "FROM site "+
-											 "WHERE site_id NOT IN (SELECT reservation.site_id FROM reservation WHERE ((?,?) OVERLAPS (from_date, to_date)))";
+											 "FROM site  "+
+											 "WHERE campground_id = ? "+
+											 "AND site_id NOT IN (SELECT reservation.site_id FROM reservation WHERE ((?,?) OVERLAPS (from_date, to_date))) "+
+											 "ORDER BY site_number asc "+
+											 "LIMIT 10";
 											//"WHERE site_id IN (SELECT * FROM reservation WHERE ((DATE ?, DATE ?) OVERLAPS (DATE from_date, DATE to_date)) = FALSE)";
-		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetSitesBySearchCriteria, fromDate, toDate);
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetSitesBySearchCriteria, campgroundId, fromDate, toDate);
 		while(results.next()) {
 			Site s = new Site();
 			s.setSiteId(results.getInt("site_id"));
