@@ -1,11 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Campsite Availability Search</title>
-	</head>
-	<body>
+<c:import url="/WEB-INF/common/header.jsp" />
+
 		<c:choose>
 			<c:when test="${empty siteList}">
 				<p>Your search returned no available campsites for the dates provided! Try using broader search criteria.</p>

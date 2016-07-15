@@ -1,11 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Site Reservation Form</title>
-	</head>
-	<body>
+<c:import url="/WEB-INF/common/header.jsp" />
+
 		<h1>Please input any additional required fields to finalize your Site reservation.</h1>
 		
 		<form action="reservationForm" method="POST">

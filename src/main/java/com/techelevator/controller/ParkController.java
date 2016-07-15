@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,6 +39,11 @@ public class ParkController {
 		this.campgroundDAO = campgroundDAO;
 		this.siteDAO = siteDAO;
 		this.reservationDAO = reservationDAO;
+	}
+	
+	@ModelAttribute
+	public void populateParkList(ModelMap model) {
+		model.put("parks", parkDAO.getAllParks());
 	}
 	
 	@RequestMapping(path={"/", "/parkList"}, method=RequestMethod.GET)

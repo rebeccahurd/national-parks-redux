@@ -1,11 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Reservation Confirmation</title>
-	</head>
-	<body>
+
+<c:import url="/WEB-INF/common/header.jsp" />
+
 		<h1>Thank you and congratulations!  You have successfully reserved a Site.  We look forward to having you at our park.</h1>
 		
 		<h3>Reservation Confirmation:</h3>
@@ -26,10 +23,6 @@
 			<tr>
 				<td>Date Reservation Created:</td>
 				<td>${reservation.createDate}</td>
-			</tr>
-			<tr>
-				<td>Site Number:</td>
-				<td>${site.siteNumber}</td>
 			</tr>
 			<tr>
 				<td>Site Number:</td>

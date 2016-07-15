@@ -1,11 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Campsite Search Form</title>
-	</head>
-	<body>
+<c:import url="/WEB-INF/common/header.jsp" />
+
 		<h1>Reserve a Campsite at ${param.name}!</h1>
 		<h2>Please input the desired range of dates you would like to camp in order to determine which Sites are available.</h2>
 		
