@@ -1,5 +1,6 @@
 package com.techelevator.controller;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -47,7 +48,8 @@ public class ParkController {
 	
 	@RequestMapping(path="/campgroundList", method=RequestMethod.GET)
 	public String displayCampgroundListByPark(ModelMap model,
-									@RequestParam int parkId) {
+									@RequestParam int parkId,
+									@RequestParam String name) {
 		
 		List<Campground> campgroundList = campgroundDAO.getCampgroundsByParkId(parkId);
 		model.put("campgroundList", campgroundList);
@@ -55,23 +57,20 @@ public class ParkController {
 	}
 	
 	@RequestMapping(path="/campsiteSearch", method=RequestMethod.GET)
-	public String displayCampsiteSearchForm(@RequestParam int parkId,
-											@RequestParam int campgroundId) {
-		
+	public String displayCampsiteSearchForm(@RequestParam int campgroundId,
+											@RequestParam String name) {
 		return "campsiteSearch";
 	}
 	
 	@RequestMapping(path="/campsiteSearchResults", method=RequestMethod.GET)
 	public String displaySearchResults(ModelMap model,
-										@RequestParam int parkId,
-										@RequestParam int campgroundId,
-										@RequestParam LocalDate fromDate,
-										@RequestParam LocalDate toDate,
+										@RequestParam Date fromDate,
+										@RequestParam Date toDate,
 										Site site) {
 		
-//		List<Site> siteList = siteDAO.getSitesBySearchCriteria(fromDate, toDate);
-//		model.put("siteList", siteList);
-//		model.put("sites", siteDAO.getSitesByCampgroundId());
+		// ADD CAMPGROUND ID PARAMETER TO METHOD BELOW
+		List<Site> siteList = siteDAO.getSitesBySearchCriteria(fromDate, toDate);
+		model.put("siteList", siteList);
 		return "campsiteSearchResults";
 	}
 	

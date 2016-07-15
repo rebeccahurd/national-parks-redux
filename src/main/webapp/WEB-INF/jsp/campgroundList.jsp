@@ -3,9 +3,27 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>List of Campgrounds for This Park</title>
+		<title>List of Campgrounds for ${park}</title>
 	</head>
 	<body>
-		<h1>Please choose one of the options below to search for availability.</h1>
+		<h1>Please choose one of the options below to search for availability for
+		the following campgrounds at ${param.name}</h1>
+		
+		<div id="campgroundContainer">
+			<c:forEach var="campground" items="${campgroundList}">
+				<c:url var="campgroundHref" value="/campsiteSearch">
+					<c:param name="campgroundId">${campground.campgroundId}</c:param>
+				</c:url>
+				
+				<h3><a href="${campgroundHref}">${campground.name}</a></h3>
+				<h4>Key Facts:</h4>
+				<p>Months Open: ${campground.openFromMM} - ${campground.openToMM}</p>
+				<p>Daily Fee: $${campground.dailyFee}0</p>
+				
+				<a href="${campgroundHref}">Find Availability</a>
+			</c:forEach>
+		
+		</div>
+		
 	</body>
 </html>
