@@ -45,16 +45,48 @@ public class JDBCSiteDAO implements SiteDAO{
 	}
 	
 	@Override
-	public List<Site> getSitesBySearchCriteria(int campgroundId, Date fromDate, Date toDate) {
+//	public List<Site> getSitesBySearchCriteria(int campgroundId, Date fromDate, Date toDate) {
+//		ArrayList<Site> siteList = new ArrayList<>();
+//		String sqlGetSitesBySearchCriteria = "SELECT * "+
+//											 "FROM site  "+
+//											 "WHERE campground_id = ? "+
+//											 "AND site_id NOT IN (SELECT reservation.site_id FROM reservation WHERE ((?,?) OVERLAPS (from_date, to_date))) "+
+//											 "ORDER BY site_number asc "+
+//											 "LIMIT 10";
+	public List<Site> getSitesBySearchCriteria(int campgroundId, Date fromDate, Date toDate, int maxRvLength, int maxOccupancy, boolean accessible, boolean utilities) {
+		
+		String prefix = "SELECT * "+
+				 		"FROM site  "+
+				 		"WHERE campground_id = ? "+
+				 		"AND max_rv_length >= ? AND max_occupancy >= ? ";
+		
+		String suffix = "AND site_id NOT IN (SELECT reservation.site_id FROM reservation WHERE ((?,?) OVERLAPS (from_date, to_date))) "+
+				 		"ORDER BY max_occupancy asc, max_rv_length desc "+
+				 		"LIMIT 10";
+		
 		ArrayList<Site> siteList = new ArrayList<>();
-		String sqlGetSitesBySearchCriteria = "SELECT * "+
-											 "FROM site  "+
-											 "WHERE campground_id = ? "+
-											 "AND site_id NOT IN (SELECT reservation.site_id FROM reservation WHERE ((?,?) OVERLAPS (from_date, to_date))) "+
-											 "ORDER BY site_number asc "+
-											 "LIMIT 10";
-											//"WHERE site_id IN (SELECT * FROM reservation WHERE ((DATE ?, DATE ?) OVERLAPS (DATE from_date, DATE to_date)) = FALSE)";
-		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetSitesBySearchCriteria, campgroundId, fromDate, toDate);
+		String sqlGetSitesBySearchCriteria = null;
+		SqlRowSet results = null;
+		if(accessible && utilities) {
+			sqlGetSitesBySearchCriteria = prefix + "AND accessible = ? AND utilities = ? "+ suffix;
+					 
+		results = jdbcTemplate.queryForRowSet(sqlGetSitesBySearchCriteria, campgroundId, maxRvLength, maxOccupancy, accessible, utilities, fromDate, toDate);
+		} 
+		else if(accessible && !utilities) {
+			sqlGetSitesBySearchCriteria = prefix + "AND accessible = ? "+ suffix;
+					
+		results = jdbcTemplate.queryForRowSet(sqlGetSitesBySearchCriteria, campgroundId, maxRvLength, maxOccupancy, accessible, fromDate, toDate);	
+		}
+		else if(!accessible && utilities) {
+			sqlGetSitesBySearchCriteria = prefix + "AND utilities = ? " + suffix;
+					
+		results = jdbcTemplate.queryForRowSet(sqlGetSitesBySearchCriteria, campgroundId, maxRvLength, maxOccupancy, utilities, fromDate, toDate);	
+		}
+		else {
+		sqlGetSitesBySearchCriteria = prefix + suffix;
+		results = jdbcTemplate.queryForRowSet(sqlGetSitesBySearchCriteria, campgroundId, maxRvLength, maxOccupancy, fromDate, toDate);
+		}
+		
 		while(results.next()) {
 			Site s = new Site();
 			s.setSiteId(results.getInt("site_id"));

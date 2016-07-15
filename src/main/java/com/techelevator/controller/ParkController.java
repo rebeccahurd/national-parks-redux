@@ -74,7 +74,7 @@ public class ParkController {
 		Date sqlFromDate = Date.valueOf(fromDate);
 		Date sqlToDate = Date.valueOf(toDate);
 		
-		List<Site> siteList = siteDAO.getSitesBySearchCriteria(campgroundId, sqlFromDate, sqlToDate);
+		List<Site> siteList = siteDAO.getSitesBySearchCriteria(campgroundId, sqlFromDate, sqlToDate, site.getMaxRvLength(), site.getMaxOccupancy(), site.isAccessible(), site.isUtilities());
 		Reservation r = new Reservation();
 		r.setFromDate(sqlFromDate);
 		r.setToDate(sqlToDate);
