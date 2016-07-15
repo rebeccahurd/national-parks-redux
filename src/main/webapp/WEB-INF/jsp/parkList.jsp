@@ -19,6 +19,9 @@
 					<%-- <c:url var="parkImgSrc" value="img/parks/${park.parkCode}.jpg" />
 					<a href="${parkHref}"><img src="${parkImgSrc}" /></a> --%>
 					<p>${park.description}</p>
+					
+					<c:url var="parkImgSrc" value="img/${park.name}.jpg" />
+					<img src="${parkImgSrc}" />
 				</div>	
 			</c:forEach>
 		</div>
