@@ -4,7 +4,7 @@
 
 		<h1>Please input any additional required fields to finalize your Site reservation.</h1>
 		
-		<form action="reservationForm" method="POST">
+		<form action="reservationForm" method="POST" class="form">
 			<table>
 				<tr>
 					<td><label for="name">Your Name:</label></td>

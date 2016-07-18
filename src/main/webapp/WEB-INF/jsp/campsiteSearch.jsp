@@ -5,7 +5,7 @@
 		<h1>Reserve a Campsite at ${param.name}!</h1>
 		<h2>Please input the desired range of dates you would like to camp in order to determine which Sites are available.</h2>
 		
-		<form action="campsiteSearchResults" method="GET">
+		<form action="campsiteSearchResults" method="GET" class="form">
 			<label for="fromDate">* Reservation Start Date:</label>
 			<input type="date" name="fromDate" id="fromDate"/><br>
 		

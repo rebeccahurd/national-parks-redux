@@ -22,9 +22,7 @@
 						<p>Months Open: ${campground.openFromMM} - ${campground.openToMM}</p>
 						<p>Daily Fee: $${campground.dailyFee}0</p>
 						
-						<div class="button">
-							<a href="${campgroundHref}">Find Availability</a>
-						</div>
+						<a href="${campgroundHref}" class="button">Find Availability</a>
 					</div>
 				</div>
 			</c:forEach>
